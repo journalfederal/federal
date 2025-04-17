@@ -57,6 +57,9 @@ def journal_image():
 
 @app.route('/api/videos')
 def get_videos():
+    import json
+    with open('summaries.json', 'r') as f:
+        summaries = json.load(f)
     api_key = os.getenv("YOUTUBE_API_KEY")
     channel_id = "UC5HDiPPo2O_y2LLAjh_o6wQ"
     url = f"https://www.googleapis.com/youtube/v3/search?key={api_key}&channelId={channel_id}&part=snippet,id&order=date&maxResults=6&type=video"
@@ -76,7 +79,7 @@ def get_videos():
                 "views": "0",
                 "date": snippet["publishedAt"][:10],
                 "excerpt": snippet["description"][:150] + "...",
-                "fullContent": snippet["description"]
+            "fullContent": summaries.get(video_id, {}).get("summary", "Your full article text goes here...")
             })
 
     return jsonify(videos)

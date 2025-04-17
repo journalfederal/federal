@@ -75,5 +75,6 @@ def process_video(video_id, title, date, views):
 def get_all_videos():
     return list(load_db().values())
 
-if __name__ == "__main__":  # Existing block
-    pass  # Removed app.run(debug=True) line
+if __name__ == "__main__":
+    test = process_video("dQw4w9WgXcQ", "Fed Faiz Artırım Kararı", "2025-04-17", "125456")
+    print("✓ Test summary written:", test["summary"][:100])
