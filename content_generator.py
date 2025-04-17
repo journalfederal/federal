@@ -1,4 +1,5 @@
 import os
+import sqlite3
 
 import openai
 import json
@@ -7,7 +8,7 @@ from datetime import datetime
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 print("OPENAI KEY:", openai.api_key)
-DB_PATH = "summaries.json"
+DB_PATH = "summaries.db"
 
 def get_transcript(video_id):
     try:
@@ -38,24 +39,45 @@ def generate_summary(transcript):
         print("OpenAI Error:", e)
         return "Failed to summarize."
 
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS summaries (
+            video_id TEXT PRIMARY KEY,
+            title TEXT,
+            date TEXT,
+            views TEXT,
+            summary TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
 def load_db():
-    if os.path.exists(DB_PATH):
-        try:
-            with open(DB_PATH, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    return data
-                else:
-                    print("DB is not a dict, resetting.")
-                    return {}
-        except Exception as e:
-            print("Failed to load DB:", e)
-            return {}
-    return {}
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT video_id, title, date, views, summary FROM summaries")
+    rows = c.fetchall()
+    conn.close()
+    return {row[0]: {
+        "id": row[0],
+        "title": row[1],
+        "date": row[2],
+        "views": row[3],
+        "summary": row[4]
+    } for row in rows}
 
 def save_db(data):
-    with open(DB_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+def save_entry(video_data):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+        INSERT OR REPLACE INTO summaries (video_id, title, date, views, summary)
+        VALUES (?, ?, ?, ?, ?)
+    """, (video_data["id"], video_data["title"], video_data["date"], video_data["views"], video_data["summary"]))
+    conn.commit()
+    conn.close()
 
 def process_video(video_id, title, date, views):
     db = load_db()
@@ -75,7 +97,7 @@ def process_video(video_id, title, date, views):
         "summary": summary
     }
     db[video_id] = video_data
-    save_db(db)
+    save_entry(video_data)
     return video_data
 
 def get_all_videos():
@@ -96,6 +118,7 @@ def sync_and_generate_summaries():
     except Exception as e:
         print("Error in sync_and_generate_summaries:", e)
 
+init_db()
 if __name__ == "__main__":
     try:
         sync_and_generate_summaries()

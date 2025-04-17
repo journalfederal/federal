@@ -1,0 +1,16 @@
+import sqlite3
+
+# Veritabanını oluştur veya bağlan
+conn = sqlite3.connect('summaries.db')
+c = conn.cursor()
+
+# Tabloyu oluştur (eğer yoksa)
+c.execute('''
+CREATE TABLE IF NOT EXISTS summaries (
+    video_id TEXT PRIMARY KEY,
+    summary TEXT
+)
+''')
+
+conn.commit()
+conn.close()
