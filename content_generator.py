@@ -81,7 +81,7 @@ def process_video(video_id, title, date, views):
 def get_all_videos():
     return list(load_db().values())
 
-if __name__ == "__main__":
+def sync_and_generate_summaries():
     try:
         with open("videos.json", "r", encoding="utf-8") as f:
             videos = json.load(f)
@@ -93,5 +93,11 @@ if __name__ == "__main__":
                 result = process_video(video_id, title, date, views)
                 if result:
                     print(f"✓ Summary for {video_id}: {result['summary'][:80]}")
+    except Exception as e:
+        print("Error in sync_and_generate_summaries:", e)
+
+if __name__ == "__main__":
+    try:
+        sync_and_generate_summaries()
     except Exception as e:
         print("Error processing videos:", e)
