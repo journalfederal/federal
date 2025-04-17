@@ -10,6 +10,8 @@ load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 app = Flask(__name__)
+from content_generator import sync_and_generate_summaries
+sync_and_generate_summaries()
 
 @app.route('/')
 def home():
