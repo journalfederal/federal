@@ -4,14 +4,13 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import os
 from dotenv import load_dotenv
 import requests
-from content_generator import process_video, sync_and_generate_summaries
+from content_generator import process_video
 import sqlite3
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 app = Flask(__name__)
-sync_and_generate_summaries()
 
 @app.route('/')
 def home():
