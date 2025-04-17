@@ -1,15 +1,12 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
 
 import openai
 import json
 from youtube_transcript_api import YouTubeTranscriptApi
 from datetime import datetime
 
-print("OPENAI KEY:", openai.api_key)
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
+print("OPENAI KEY:", openai.api_key)
 DB_PATH = "summaries.json"
 
 def get_transcript(video_id):
@@ -43,8 +40,12 @@ def generate_summary(transcript):
 
 def load_db():
     if os.path.exists(DB_PATH):
-        with open(DB_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(DB_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print("Failed to load DB:", e)
+            return {}
     return {}
 
 def save_db(data):
