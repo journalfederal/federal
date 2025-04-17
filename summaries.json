@@ -1,9 +1,29 @@
-[
-  {
-    "id": "dQw4w9WgXcQ",
-    "title": "Fed Interest Rate Decision",
-    "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+import json
+from dotenv import load_dotenv
+import os
+load_dotenv()
+import openai
+openai.api_key = os.getenv("OPENAI_API_KEY")
+print("OPENAI KEY:", openai.api_key)
+
+# Load summaries from JSON file
+with open("summaries.json", "r") as f:
+    db = json.load(f)
+    if not isinstance(db, dict):
+        db = {}
+
+# Example of adding a new video
+video_id = "new_video_id"
+video_data = {
+    "id": video_id,
+    "title": "New Video Title",
+    "thumbnail": "https://example.com/thumbnail.jpg",
     "date": "2025-04-16",
-    "summary": "The Federal Reserve announced its latest interest rate hike amid inflation concerns. Analysts are divided on the impact..."
-  }
-]
+    "summary": "This is a summary of the new video."
+}
+
+db[video_id] = video_data
+
+# Save the updated summaries back to the JSON file
+with open("summaries.json", "w") as f:
+    json.dump(db, f, indent=4)

@@ -42,7 +42,12 @@ def load_db():
     if os.path.exists(DB_PATH):
         try:
             with open(DB_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+                else:
+                    print("DB is not a dict, resetting.")
+                    return {}
         except Exception as e:
             print("Failed to load DB:", e)
             return {}
@@ -77,5 +82,16 @@ def get_all_videos():
     return list(load_db().values())
 
 if __name__ == "__main__":
-    test = process_video("dQw4w9WgXcQ", "Fed Faiz Artırım Kararı", "2025-04-17", "125456")
-    print("✓ Test summary written:", test["summary"][:100])
+    try:
+        with open("videos.json", "r", encoding="utf-8") as f:
+            videos = json.load(f)
+            for video in videos:
+                video_id = video.get("id")
+                title = video.get("title")
+                date = video.get("date")
+                views = video.get("views")
+                result = process_video(video_id, title, date, views)
+                if result:
+                    print(f"✓ Summary for {video_id}: {result['summary'][:80]}")
+    except Exception as e:
+        print("Error processing videos:", e)
