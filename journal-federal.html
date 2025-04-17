@@ -622,7 +622,11 @@
             const videoCard = document.createElement('div');
             videoCard.className = 'video-card';
             const fullId = `full-${index}`;
- 
+     
+            const description = video.description || 'No description available for this video.';
+            const previewText = description.slice(0, 300);
+            const hiddenText = description.length > 300 ? description.slice(300) : '';
+     
             videoCard.innerHTML = `
               <h2 class="video-title">${video.title}</h2>
               <div class="video-container">
@@ -633,13 +637,13 @@
                   <div class="video-views"><i class="fas fa-eye"></i> <span id="view-${index}">Loading...</span> views</div>
                   <div class="video-date">${video.date}</div>
                 </div>
-                <p class="article-excerpt">${video.summary || 'No summary available for this video.'}</p>
-                <a href="#" class="read-more-btn read-more-toggle" data-target="full-${index}">Read More <i class="fas fa-chevron-right"></i></a>
-                <div class="article-full" id="full-${index}">${video.summary || 'No summary available for this video.'}</div>
+                <p class="article-excerpt">${previewText}${hiddenText ? '<span class="dots">...</span><span class="more-text" style="display:none;">' + hiddenText + '</span>' : ''}</p>
+                ${hiddenText ? `<a href="#" class="read-more-btn read-more-toggle" data-target="excerpt-${index}">Read More <i class="fas fa-chevron-right"></i></a>` : ''}
               </div>
             `;
- 
+     
             videoList.appendChild(videoCard);
+     
             fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${video.id}&key=${YOUTUBE_API_KEY}`)
               .then(res => res.json())
               .then(data => {

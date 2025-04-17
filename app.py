@@ -77,13 +77,15 @@ def get_videos():
         if "videoId" in item["id"]:
             video_id = item["id"]["videoId"]
             snippet = item["snippet"]
+            description = snippet["description"]
+            excerpt = description[:300] + ("..." if len(description) > 300 else "")
             videos.append({
                 "id": video_id,
                 "title": summaries.get(video_id, {}).get("title", snippet["title"]),
                 "thumbnail": snippet["thumbnails"]["high"]["url"],
                 "views": summaries.get(video_id, {}).get("views", "0"),
                 "date": summaries.get(video_id, {}).get("date", snippet["publishedAt"][:10]),
-                "excerpt": snippet["description"][:150] + "...",
+                "excerpt": excerpt,
                 "fullContent": summaries.get(video_id, {}).get("summary", "Your full article text goes here...")
             })
 
