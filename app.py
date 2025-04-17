@@ -4,6 +4,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import os
 from dotenv import load_dotenv
 import requests
+from content_generator import process_video
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
@@ -79,6 +80,11 @@ def get_videos():
             })
 
     return jsonify(videos)
+
+@app.route('/api/sync-videos')
+def sync_videos():
+    process_video()
+    return jsonify({"message": "Video content synced successfully."})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
