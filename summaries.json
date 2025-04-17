@@ -1,29 +1,18 @@
 import json
-from dotenv import load_dotenv
-import os
-load_dotenv()
-import openai
-openai.api_key = os.getenv("OPENAI_API_KEY")
-print("OPENAI KEY:", openai.api_key)
 
-# Load summaries from JSON file
+# Load summaries.json
 with open("summaries.json", "r") as f:
-    db = json.load(f)
-    if not isinstance(db, dict):
+    try:
+        db = json.load(f)
+        if not isinstance(db, dict):
+            print("⚠️ summaries.json içeriği geçersiz, sıfırlanıyor.")
+            db = {}
+    except json.JSONDecodeError:
+        print("⚠️ summaries.json bozuk, sıfırlanıyor.")
         db = {}
 
-# Example of adding a new video
-video_id = "new_video_id"
-video_data = {
-    "id": video_id,
-    "title": "New Video Title",
-    "thumbnail": "https://example.com/thumbnail.jpg",
-    "date": "2025-04-16",
-    "summary": "This is a summary of the new video."
-}
+# ... rest of the code ...
 
-db[video_id] = video_data
-
-# Save the updated summaries back to the JSON file
+# Save summaries.json
 with open("summaries.json", "w") as f:
     json.dump(db, f, indent=4)
