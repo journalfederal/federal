@@ -1,18 +1,1 @@
-import json
-
-# Load summaries.json
-with open("summaries.json", "r") as f:
-    try:
-        db = json.load(f)
-        if not isinstance(db, dict):
-            print("⚠️ summaries.json içeriği geçersiz, sıfırlanıyor.")
-            db = {}
-    except json.JSONDecodeError:
-        print("⚠️ summaries.json bozuk, sıfırlanıyor.")
-        db = {}
-
-# ... rest of the code ...
-
-# Save summaries.json
-with open("summaries.json", "w") as f:
-    json.dump(db, f, indent=4)
+{}
