@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 import requests
 from content_generator import process_video, sync_and_generate_summaries
+import sqlite3
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
@@ -58,11 +59,14 @@ def journal_image():
 
 @app.route('/api/videos')
 def get_videos():
-    import json
-    with open('summaries.json', 'r') as f:
-        summaries = json.load(f)
-        if isinstance(summaries, list):
-            summaries = {}
+    conn = sqlite3.connect("summaries.db")
+    c = conn.cursor()
+
+    c.execute("CREATE TABLE IF NOT EXISTS summaries (video_id TEXT PRIMARY KEY, title TEXT, date TEXT, views TEXT, summary TEXT)")
+    summaries = {row[0]: {"summary": row[4]} for row in c.execute("SELECT * FROM summaries")}
+
+    conn.close()
+
     api_key = os.getenv("YOUTUBE_API_KEY")
     channel_id = "UC5HDiPPo2O_y2LLAjh_o6wQ"
     url = f"https://www.googleapis.com/youtube/v3/search?key={api_key}&channelId={channel_id}&part=snippet,id&order=date&maxResults=6&type=video"
@@ -82,7 +86,7 @@ def get_videos():
                 "views": "0",
                 "date": snippet["publishedAt"][:10],
                 "excerpt": snippet["description"][:150] + "...",
-            "fullContent": summaries.get(video_id, {}).get("summary", "Your full article text goes here...")
+                "fullContent": summaries.get(video_id, {}).get("summary", "Your full article text goes here...")
             })
 
     return jsonify(videos)

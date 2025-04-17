@@ -68,7 +68,6 @@ def load_db():
         "summary": row[4]
     } for row in rows}
 
-def save_db(data):
 def save_entry(video_data):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
