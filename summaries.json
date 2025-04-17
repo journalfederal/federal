@@ -15,4 +15,4 @@ with open("summaries.json", "r") as f:
 
 # Save summaries.json
 with open("summaries.json", "w") as f:
-    json.dump({}, f, indent=4)
+    json.dump(db, f, indent=4)
