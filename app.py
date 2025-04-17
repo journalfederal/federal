@@ -1,12 +1,9 @@
 from flask import Flask, jsonify, send_file
 from flask_cors import CORS
-from youtube_transcript_api import YouTubeTranscriptApi
 import os
 from dotenv import load_dotenv
 import requests
-from content_generator import process_video
 import sqlite3
-from content_generator import generate_summary_for_video
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
@@ -18,18 +15,6 @@ def home():
     return send_file('journal-federal.html')
 
 CORS(app)
-
-@app.route('/api/transcript/<video_id>', methods=['GET'])
-def get_transcript(video_id):
-    try:
-        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
-        full_text = ' '.join([line['text'] for line in transcript])
-        return jsonify({
-            'channel_id': 'UC5HDiPPo2O_y2LLAjh_o6wQ',
-            'transcript': full_text
-        })
-    except Exception as e:
-        return jsonify({'error': f'Could not retrieve transcript: {str(e)}'}), 404
 
 @app.route('/api/channel-stats')
 def get_channel_stats():
@@ -80,22 +65,13 @@ def get_videos():
             description = snippet["description"]
             excerpt = description[:300] + ("..." if len(description) > 300 else "")
             videos.append({
-                "id": video_id,
-                "title": summaries.get(video_id, {}).get("title", snippet["title"]),
-                "thumbnail": snippet["thumbnails"]["high"]["url"],
-                "views": summaries.get(video_id, {}).get("views", "0"),
-                "date": summaries.get(video_id, {}).get("date", snippet["publishedAt"][:10]),
-                "excerpt": excerpt,
-                "fullContent": summaries.get(video_id, {}).get("summary", "Your full article text goes here...")
+                "title": snippet["title"],
+                "excerpt": excerpt
             })
 
     conn.close()
     return jsonify(videos)
 
-@app.route('/api/sync-videos')
-def sync_videos():
-    process_video()
-    return jsonify({"message": "Video content synced successfully."})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
