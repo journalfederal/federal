@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import requests
 from content_generator import process_video
 import sqlite3
+from content_generator import generate_summary_for_video
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
@@ -64,8 +65,6 @@ def get_videos():
     c.execute("CREATE TABLE IF NOT EXISTS summaries (video_id TEXT PRIMARY KEY, title TEXT, date TEXT, views TEXT, summary TEXT)")
     summaries = {row[0]: {"summary": row[4]} for row in c.execute("SELECT * FROM summaries")}
 
-    conn.close()
-
     api_key = os.getenv("YOUTUBE_API_KEY")
     channel_id = "UC5HDiPPo2O_y2LLAjh_o6wQ"
     url = f"https://www.googleapis.com/youtube/v3/search?key={api_key}&channelId={channel_id}&part=snippet,id&order=date&maxResults=6&type=video"
@@ -80,14 +79,15 @@ def get_videos():
             snippet = item["snippet"]
             videos.append({
                 "id": video_id,
-                "title": snippet["title"],
+                "title": summaries.get(video_id, {}).get("title", snippet["title"]),
                 "thumbnail": snippet["thumbnails"]["high"]["url"],
-                "views": "0",
-                "date": snippet["publishedAt"][:10],
+                "views": summaries.get(video_id, {}).get("views", "0"),
+                "date": summaries.get(video_id, {}).get("date", snippet["publishedAt"][:10]),
                 "excerpt": snippet["description"][:150] + "...",
                 "fullContent": summaries.get(video_id, {}).get("summary", "Your full article text goes here...")
             })
 
+    conn.close()
     return jsonify(videos)
 
 @app.route('/api/sync-videos')

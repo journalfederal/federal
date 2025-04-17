@@ -106,6 +106,7 @@ def sync_and_generate_summaries():
     try:
         with open("videos.json", "r", encoding="utf-8") as f:
             videos = json.load(f)
+            init_db()
             for video in videos:
                 video_id = video.get("id")
                 title = video.get("title")
@@ -117,9 +118,16 @@ def sync_and_generate_summaries():
     except Exception as e:
         print("Error in sync_and_generate_summaries:", e)
 
-init_db()
 if __name__ == "__main__":
+    init_db()
     try:
         sync_and_generate_summaries()
     except Exception as e:
         print("Error processing videos:", e)
+
+def generate_summary_for_video(video):
+    video_id = video.get("id")
+    title = video.get("title")
+    date = video.get("date")
+    views = video.get("views")
+    return process_video(video_id, title, date, views)
