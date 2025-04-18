@@ -1,177 +1,303 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NewsTube - Professional YouTube News Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Journal Federal - US Political & Economic News</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary: #ff0000;
-            --primary-dark: #cc0000;
-            --dark: #0f0f0f;
-            --dark-light: #222222;
-            --light: #ffffff;
-            --gray: #aaaaaa;
-            --gray-dark: #606060;
-            --transition: all 0.3s ease;
+            --primary-color: #d2232a;
+            --secondary-color: #8e8e93;
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-color: #f2f2f7;
+            --text-secondary: #aeaeb2;
+            --highlight-color: #0a84ff;
         }
-
+        
+        .subscriber-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .subscriber-info i {
+            color: #ff0000;
+            font-size: 1.1rem;
+        }
+        
+        .subscriber-info .thank-you {
+            margin-left: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
-
+        
         body {
-            background-color: var(--dark);
-            color: var(--light);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
         }
-
-        /* Header Styles */
+        
         header {
-            background-color: var(--dark-light);
+            background-color: var(--card-color);
             padding: 1rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        .header-container {
+        
+        .container {
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 20px;
+        }
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo img {
-            height: 40px;
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--light);
-        }
-
-        .logo-text span {
-            color: var(--primary);
-        }
-
-        .channel-stats {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .stat-item i {
-            color: var(--primary);
-            font-size: 1.1rem;
+            height: 50px;
         }
         
-        @keyframes glow {
-          0%, 100% {
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.6), 0 0 10px rgba(255, 0, 0, 0.4);
-          }
-          50% {
-            text-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 25px rgba(255, 0, 0, 0.8);
-          }
+        .logo img {
+            height: 100%;
+            width: auto;
         }
-
-        .stat-number {
-            font-weight: 600;
-            color: var(--light);
-            animation: glow 1.8s infinite ease-in-out;
-        }
-
-        .header-actions {
+        
+        nav ul {
             display: flex;
-            gap: 1rem;
+            list-style: none;
         }
-
-        .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
-            font-weight: 500;
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: var(--transition);
-            display: inline-flex;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1200x400/1e1e1e/8e8e93');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 2rem;
         }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--light);
+        
+        .hero-content {
+            width: 100%;
         }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        
+        .btn:hover {
+            background-color: #b81d23;
             transform: translateY(-2px);
         }
-
+        
         .btn-outline {
-            border: 1px solid var(--primary);
-            color: var(--primary);
             background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            margin-left: 15px;
         }
-
+        
         .btn-outline:hover {
-            background-color: rgba(255, 0, 0, 0.1);
+            background-color: rgba(210,35,42,0.1);
+            transform: translateY(-2px);
         }
-
-        /* Main Content */
-        .main-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+        
+        .btn.subscribe-animate {
+            animation: pulseGlow 1.5s infinite;
+            box-shadow: 0 0 0 rgba(210,35,42, 0.4);
+        }
+        
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(210,35,42, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(210,35,42, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(210,35,42, 0);
+            }
+        }
+        
+        .main-content {
             display: grid;
-            grid-template-columns: 1fr 300px;
+            grid-template-columns: 2fr 1fr;
             gap: 2rem;
+            margin-bottom: 3rem;
         }
-
-        /* Video Card */
-        .video-card {
-            background-color: var(--dark-light);
+        
+        .news-section h2, .sidebar h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .news-section h2 i, .sidebar h3 i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .news-card {
+            background-color: var(--card-color);
             border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            transition: var(--transition);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .video-card:hover {
+        
+        .news-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
-
+        
+        .news-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .news-content {
+            padding: 1.8rem;
+        }
+        
+        .news-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+            align-items: center;
+        }
+        
+        .news-meta .views {
+            display: flex;
+            align-items: center;
+        }
+        
+        .news-meta .views i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+        
+        .news-excerpt {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .read-more-btn {
+            color: var(--highlight-color);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        
+        .read-more-btn:hover {
+            color: #007aff;
+        }
+        
+        .read-more-btn i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .read-more-btn:hover i {
+            transform: translateX(3px);
+        }
+        
         .video-container {
             position: relative;
             padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
+            margin-top: 1.8rem;
+            border-radius: 8px;
+            background-color: #000;
         }
-
+        
         .video-container iframe {
             position: absolute;
             top: 0;
@@ -180,500 +306,807 @@
             height: 100%;
             border: none;
         }
-
-        .video-content {
-            padding: 1.5rem;
-        }
-
-        .video-title {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .video-meta {
-            display: flex;
-            justify-content: space-between;
-            color: var(--gray);
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .video-views {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .video-views i {
-            color: var(--primary);
-        }
-
-        .article-excerpt {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .read-more-btn {
-            color: var(--primary);
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: var(--transition);
-        }
-
-        .read-more-btn:hover {
-            color: var(--primary-dark);
-        }
-
-        .read-more-btn i {
-            transition: var(--transition);
-        }
-
-        .read-more-btn:hover i {
-            transform: translateX(3px);
-        }
-
-        .article-full {
-            display: none;
-            color: var(--gray);
-            line-height: 1.7;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-
+        
         .sidebar-card {
-            background-color: var(--dark-light);
+            background-color: var(--card-color);
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .sidebar-title {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .sidebar-title i {
-            color: var(--primary);
-        }
-
-        .trending-list {
+        
+        .popular-list {
             list-style: none;
         }
-
-        .trending-item {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        
+        .popular-list li {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
         }
-
-        .trending-item:last-child {
+        
+        .popular-list li:hover {
+            background-color: rgba(255,255,255,0.02);
+        }
+        
+        .popular-list li:last-child {
             border-bottom: none;
         }
-
-        .trending-link {
-            color: var(--light);
+        
+        .popular-list a {
+            color: var(--text-color);
             text-decoration: none;
-            transition: var(--transition);
+            transition: color 0.3s;
             display: flex;
             align-items: center;
-            gap: 0.7rem;
             font-size: 0.95rem;
         }
-
-        .trending-link:hover {
-            color: var(--primary);
+        
+        .popular-list a:hover {
+            color: var(--highlight-color);
         }
-
-        .trending-link i {
-            color: var(--primary);
-            font-size: 0.7rem;
+        
+        .popular-list a i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 0.8rem;
         }
-
+        
         .subscribe-box {
             text-align: center;
+            padding: 2rem 1.5rem;
         }
-
+        
         .subscribe-box h4 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 1rem;
+            font-weight: 500;
         }
-
+        
         .subscribe-box p {
-            color: var(--gray);
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
-
-        /* Footer */
+        
+        .search-box {
+            position: relative;
+            margin: 2rem 0 1rem 0;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            border-radius: 30px;
+            border: none;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            outline: none;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
         footer {
-            background-color: var(--dark-light);
-            padding: 3rem 0;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--card-color);
+            padding: 3rem 0 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
+        
+        .footer-content {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
+            margin-bottom: 2rem;
         }
-
+        
         .footer-column h3 {
             font-size: 1.1rem;
             margin-bottom: 1.5rem;
+            color: var(--text-color);
             font-weight: 600;
         }
-
-        .footer-links {
+        
+        .footer-column ul {
             list-style: none;
         }
-
-        .footer-links li {
+        
+        .footer-column ul li {
             margin-bottom: 0.8rem;
         }
-
-        .footer-links a {
-            color: var(--gray);
+        
+        .footer-column ul li a {
+            color: var(--text-secondary);
             text-decoration: none;
-            transition: var(--transition);
+            transition: color 0.3s;
             font-size: 0.9rem;
         }
-
-        .footer-links a:hover {
-            color: var(--primary);
+        
+        .footer-column ul li a:hover {
+            color: var(--highlight-color);
         }
-
+        
         .contact-info {
-            color: var(--gray);
+            color: white;
             font-size: 0.9rem;
-            line-height: 1.7;
+            line-height: 1.6;
             margin-bottom: 1rem;
         }
-
+        
         .contact-info i {
             width: 20px;
-            color: var(--primary);
-            margin-right: 0.5rem;
+            color: var(--primary-color);
+            margin-right: 8px;
         }
-
+        
         .social-links {
             display: flex;
-            gap: 1rem;
+            gap: 1.2rem;
         }
-
+        
         .social-links a {
-            color: var(--gray);
+            color: var(--text-secondary);
             font-size: 1.2rem;
-            transition: var(--transition);
+            transition: color 0.3s;
         }
-
+        
         .social-links a:hover {
-            color: var(--primary);
+            color: var(--primary-color);
         }
-
+        
         .copyright {
             text-align: center;
             padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--gray);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
             font-size: 0.85rem;
-            grid-column: 1 / -1;
         }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .main-container {
-                grid-template-columns: 1fr;
+        
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
             }
-
-            .sidebar {
-                position: static;
-                margin-top: 2rem;
-            }
-            .sidebar {
+            
+            nav ul {
+                margin-top: 1.5rem;
+                flex-direction: column;
+                align-items: center;
                 display: none;
             }
-        }
-
-        @media (max-width: 768px) {
-            .header-container {
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            nav ul li {
+                margin: 0.7rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 1.2rem;
+                right: 1.2rem;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                height: 350px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+            
+            .btn-group {
+                display: flex;
                 flex-direction: column;
                 gap: 1rem;
             }
-
-            .channel-stats {
-                order: 3;
-                width: 100%;
-                justify-content: space-around;
-                margin-top: 1rem;
+            
+            .btn-outline {
+                margin-left: 0;
             }
-
-            .footer-container {
+            
+            .footer-content {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
         }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        /* Loading animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hidden content for read more */
+        .hidden-content {
+            display: none;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            overflow: visible;
+            max-height: none;
+        }
+        
+        /* YouTube badge */
+        .youtube-badge {
+            background-color: #ff0000;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        
+        .youtube-badge i {
+            margin-right: 5px;
+            font-size: 0.7rem;
+        }
+        
+        /* Privacy and About pages */
+        .page-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        .page-content h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .page-content h2 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-color);
+        }
+        
+        .page-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        
+        .page-content ul {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .page-content ul li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
         }
 
-        .video-card {
-            animation: fadeIn 0.5s ease forwards;
+        @keyframes vibrateText {
+          0% { transform: translate(0); }
+          20% { transform: translate(-1px, 1px); }
+          40% { transform: translate(-1px, -1px); }
+          60% { transform: translate(1px, 1px); }
+          80% { transform: translate(1px, -1px); }
+          100% { transform: translate(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .subscriber-info span,
+        .subscriber-info i {
+          animation: vibrateText 2.5s infinite ease-in-out;
         }
-
-        .btn-primary {
-            animation: pulse 2s infinite;
-        }
-        .video-section {
-            grid-column: 1 / -1;
-        }
-
-        @keyframes subtlePulse {
-          0% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.03); opacity: 0.85; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-
-        .sidebar-title, .trending-link {
-          animation: subtlePulse 2.5s infinite ease-in-out;
+        
+        .popular-list li a {
+            animation: vibrateText 2.5s infinite ease-in-out;
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="header-container">
-            <div class="logo">
-                <img src="journal.png" alt=" Logo" class="logo">
-                <div class="logo-text"><span></span></div>
-            </div>
-
-            <div class="channel-stats">
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <span class="stat-number" id="subscriberCount">15,842</span>
-                    <span>Subscribers</span>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="loadHomePage()" style="cursor: pointer;">
+                    <img src="static/journal.png">
                 </div>
-                <div class="stat-item">
-                    <i class="fas fa-eye"></i>
-                    <span class="stat-number" id="viewCount">98,756</span>
-                    <span>Views</span>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-bolt"></i>
-                    <span class="stat-number">24</span>
-                    <span>Live</span>
-                </div>
-            </div>
-
-            <div class="header-actions">
-            <a href="#" class="btn btn-primary">
+                <div class="subscriber-info" id="subscriberInfo">
                     <i class="fab fa-youtube"></i>
-                    Subscribe
-                </a>
-                <a href="#" class="btn btn-outline">
-                    <i class="fas fa-tv"></i>
-                    Live Broadcast
-                </a>
+                    <span id="subscriberCount">0</span> Subscribers
+                    <span id="viewCount" style="margin-left: 10px;">0 Views</span>
+                    <span class="thank-you" style="margin-left: 12px;">Thanks for Subscribing!</span>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                <nav>
+                    <ul id="mainMenu">
+                        <li><a href="#" class="btn subscribe-animate">Subscribe</a></li>
+                        <li><a href="#" class="btn btn-outline">Watch Live</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
 
-    <div class="main-container">
-        <main class="video-section" style="grid-column: 1;">
-            <div id="video-list"></div>
-        </main>
-
-        <aside class="sidebar" style="grid-column: 2;">
-            <div class="sidebar-card">
-                <h3 class="sidebar-title">
-                    <i class="fas fa-fire"></i>
-                    Latest News
-                </h3>
-                <ul class="trending-list">
-                    <!-- Trending items will be injected dynamically via JavaScript -->
-                </ul>
+    <div id="app-content">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>US Political & Economic News</h1>
+                <p>Comprehensive coverage and analysis of the latest developments in US politics and economy</p>
+                <div class="btn-group">
+                    <a href="#" class="btn">Latest Videos</a>
+                    <a href="#" class="btn btn-outline">Trending Analysis</a>
+                </div>
             </div>
+        </section>
 
-            <div class="sidebar-card subscribe-box">
-                <h4>Stay Updated with New Videos</h4>
-                <p>Subscribe to our channel to get the latest news.</p>
-                <a href="#" class="btn btn-primary">
-                    <i class="fab fa-youtube"></i>
-                    Subscribe
-                </a>
+        <div class="container">
+            <div class="main-content">
+                <main class="news-section">
+                    <h2><i class="fas fa-newspaper"></i>Latest News</h2>
+                    <div id="news-container">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </main>
+
+                <aside class="sidebar">
+                    <div class="sidebar-card search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search news...">
+                    </div>
+                    <div id="no-results-message" style="display:none; color: red; font-size: 1.1rem; text-align: center;">
+                        <p>No results found for your search.</p>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-fire"></i>Trending Videos</h3>
+                        <ul class="popular-list" id="popular-videos">
+                            <!-- Popular videos will be populated by JavaScript -->
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card subscribe-box">
+                        <h4>Get Notified About New Videos</h4>
+                        <p>Subscribe to our YouTube channel for the latest US political and economic news analysis.</p>
+                        <a href="#" class="btn">Subscribe Now</a>
+                    </div>
+
+                    <div class="sidebar-card subscribe-box">
+                        <h4>About Us and Contact Information</h4>
+                        <p>Click here to learn more about us and get in touch with our team.</p>
+                        <a href="#" class="btn" onclick="showAboutUsContent(event)">Click for Info</a>
+                        <div class="notification-content" style="display: none; margin-top: 1rem;">
+                            <h5>About Us</h5>
+                            <p>Welcome to Journal Federal! We provide in-depth coverage and analysis of US political and economic news to keep our audience informed of the latest developments.</p>
+                            <h5>Contact Information</h5>
+                            <ul>
+                                <li><strong>Email:</strong> <a href="mailto:news@journalfederal.com">news@journalfederal.com</a></li>
+                                <li><strong>Phone:</strong> <a href="tel:+13072038452">+1 (307) 203-8452</a></li>
+                                <li><strong>Address:</strong> 30 N Gould St Ste 41801, Sheridan, WY 82801</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-card subscribe-box" id="notification-box">
+                        <h4>Receive Updates</h4>
+                        <p>Click here for the latest updates.</p>
+                        <a href="#" class="btn" onclick="showNotificationContent()">Click for Info</a>
+                        <div class="notification-content" style="display: none; margin-top: 1rem;">
+                            <p>Here is the content of the new updates!</p>
+                        </div>
+                    </div>
+                </aside>
             </div>
-        </aside>
+        </div>
     </div>
 
     <footer>
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>About Harmony Global</h3>
-                <p class="contact-info">
-                    <i class="fas fa-map-marker-alt"></i>
-                    30 N Gould St, Sheridan, WY 82801
-                </p>
-                <p class="contact-info">
-                    <i class="fas fa-envelope"></i>
-                    news@journalfederal.com
-                </p>
-                <p class="contact-info">
-                    <i class="fas fa-phone"></i>
-                    +1 (307) 203-8452
-                </p>
-            </div>
-
-
-            <div class="footer-column">
-                <h3>Social Media</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>HARMONY GLOBAL TECHNOLOGY LLC</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> 30 N Gould St Ste 41801, Sheridan, WY 82801</p>
+                        <p><i class="fas fa-envelope"></i> news@journalfederal.com</p>
+                        <p>
+                            <a href="https://wa.me/13072038452" target="_blank" style="color: var(--text-secondary); text-decoration: none;">
+                                <i class="fab fa-whatsapp" style="color: #25d366;"></i> +1 (307) 203-8452
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Latest Videos</a></li>
+                        <li><a href="#">Trending Analysis</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
             </div>
-
             <div class="copyright">
-                &copy; 2024 Harmony Global Technology LLC. All rights reserved. A professional news platform integrated with YouTube.
+                &copy; 2024 Harmony Global Technology LLC. All rights reserved. Integrated with YouTube.
             </div>
         </div>
     </footer>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
- 
-          // Removed transcript fetch block. Retaining click event for read-more toggle.
-          document.addEventListener('click', function (event) {
-              const button = event.target.closest('.read-more-toggle');
-              if (!button) return;
- 
-              event.preventDefault();
-              const targetId = button.getAttribute('data-target');
-              const target = document.getElementById(targetId);
- 
-              if (target.style.display === 'block') {
-                  target.style.display = 'none';
-                  button.innerHTML = 'Read More <i class="fas fa-chevron-right"></i>';
-              } else {
-                  target.style.display = 'block';
-                  button.innerHTML = 'Show Less <i class="fas fa-chevron-up"></i>';
-              }
-          });
-      });
-    </script>
-    <script>
-      fetch('/api/channel-stats')
-        .then(response => response.json())
-        .then(data => {
-          if (data.subscribers) {
-            document.getElementById('subscriberCount').textContent = Number(data.subscribers).toLocaleString();
-            document.getElementById('viewCount').textContent = Number(data.views).toLocaleString();
-          }
-        })
-        .catch(error => {
-          console.error('Failed to load channel statistics:', error);
+        // YouTube API Configuration
+        const API_KEY = 'AIzaSyC0Bu1yl_iOzZvH4ryUpxJ-wnflP5bP1G8';
+        const CHANNEL_ID = 'UC5HDiPPo2O_y2LLAjh_o6wQ';
+        const CACHE_DURATION = 3600 * 1000; // 1 hour cache
+
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainMenu = document.getElementById('mainMenu');
+        const appContent = document.getElementById('app-content');
+        const newsContainer = document.getElementById('news-container');
+        const popularVideosList = document.getElementById('popular-videos');
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
         });
-    </script>
-    <script>
-      const YOUTUBE_API_KEY = '<your-api-key>';
-      fetch('/api/videos')
-        .then(response => response.json())
-        .then(videos => {
-          const videoList = document.getElementById('video-list');
-          videoList.innerHTML = '';
+
+
+        // YouTube Subscriber Count
+        async function fetchSubscriberCount() {
+            try {
+                const cachedCount = getFromCache('subscriberCount');
+                if (cachedCount) {
+                    updateSubscriberInfo(cachedCount);
+                    return;
+                }
+
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`
+                );
+                const data = await response.json();
+                const stats = data.items[0].statistics;
+                
+                const countData = {
+                    subscribers: stats.subscriberCount,
+                    views: stats.viewCount
+                };
+                
+                saveToCache('subscriberCount', countData, CACHE_DURATION);
+                updateSubscriberInfo(countData);
+            } catch (error) {
+                console.error('Failed to load subscriber count:', error);
+            }
+        }
+
+        function updateSubscriberInfo(data) {
+            document.getElementById('subscriberCount').textContent = 
+                parseInt(data.subscribers).toLocaleString();
+            document.getElementById('viewCount').textContent = 
+                parseInt(data.views).toLocaleString() + ' Views';
+        }
+
+        // Load Videos with Caching
+        async function loadVideos() {
+            try {
+                const cachedVideos = getFromCache('videos');
+                if (cachedVideos) {
+                    displayVideos(cachedVideos);
+                    return;
+                }
  
-          videos.reverse().forEach((video, index) => {
-            const videoCard = document.createElement('div');
-            videoCard.className = 'video-card';
-            const fullId = `full-${index}`;
-     
-            const description = video.description || 'No description available for this video.';
-            const previewText = description.slice(0, 300);
-            const hiddenText = description.length > 300 ? description.slice(300) : '';
-     
-            videoCard.innerHTML = `
-              <h2 class="video-title">${video.title}</h2>
-              <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
-              </div>
-              <div class="video-content">
-                <div class="video-meta">
-                  <div class="video-views"><i class="fas fa-eye"></i> <span id="view-${index}">Loading...</span> views</div>
-                  <div class="video-date">${video.date}</div>
-                </div>
-                <p class="article-excerpt">${previewText}${hiddenText ? '<span class="dots">...</span><span class="more-text" style="display:none;">' + hiddenText + '</span>' : ''}</p>
-                ${hiddenText ? `<a href="#" class="read-more-btn read-more-toggle" data-target="excerpt-${index}">Read More <i class="fas fa-chevron-right"></i></a>` : ''}
-              </div>
-            `;
-     
-            videoList.appendChild(videoCard);
-     
-            fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${video.id}&key=${YOUTUBE_API_KEY}`)
-              .then(res => res.json())
-              .then(data => {
-                const views = data.items[0]?.statistics?.viewCount || 'N/A';
-                document.getElementById(`view-${index}`).textContent = Number(views).toLocaleString();
-              })
-              .catch(err => {
-                console.error('Failed to fetch live view count:', err);
-              });
-          });
-          
-          const trendingList = document.querySelector('.trending-list');
-          if (trendingList) {
-            trendingList.innerHTML = '';
-            videos.slice(-5).reverse().forEach((video) => {
-              const li = document.createElement('li');
-              li.className = 'trending-item';
-              li.innerHTML = `
-                <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank" class="trending-link">
-                  <i class="fas fa-play"></i>
-                  ${video.title}
-                </a>
-              `;
-              trendingList.appendChild(li);
+                const videos = await fetchYouTubeVideos();
+                if (!videos || !videos.items || videos.items.length === 0) {
+                    throw new Error("No videos returned from YouTube API.");
+                }
+ 
+                const processedVideos = await processVideos(videos);
+                saveToCache('videos', processedVideos, CACHE_DURATION);
+                displayVideos(processedVideos);
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                showError();
+            }
+        }
+
+        // Fetch videos from YouTube
+        async function fetchYouTubeVideos() {
+            const channelResponse = await fetch(
+                `https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&id=${CHANNEL_ID}&part=contentDetails`
+            );
+            const channelData = await channelResponse.json();
+ 
+            const uploadsPlaylistId = channelData?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+            if (!uploadsPlaylistId) {
+                throw new Error("Uploads playlist ID not found.");
+            }
+ 
+            const videosResponse = await fetch(
+                `https://www.googleapis.com/youtube/v3/playlistItems?key=${API_KEY}&playlistId=${uploadsPlaylistId}&part=snippet&maxResults=20`
+            );
+            return await videosResponse.json();
+        }
+
+        // Process videos and get article content
+        async function processVideos(videosData) {
+            const videoIds = videosData.items.map(item => item.snippet.resourceId.videoId).join(',');
+            
+            // Get video details (views, duration etc.)
+            const detailsResponse = await fetch(
+                `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=snippet,statistics,contentDetails`
+            );
+            const detailsData = await detailsResponse.json();
+            
+            // Map video details
+            const processedVideos = videosData.items.map(item => {
+                const videoId = item.snippet.resourceId.videoId;
+                const details = detailsData.items.find(v => v.id === videoId);
+                
+                return {
+                    id: videoId,
+                    title: item.snippet.title,
+                    description: item.snippet.description,
+                    publishedAt: item.snippet.publishedAt,
+                    thumbnail: details?.snippet?.thumbnails?.medium?.url || '',
+                    views: details?.statistics?.viewCount || '0',
+                    duration: details?.contentDetails?.duration || 'PT0M0S',
+                    // Other details...
+                };
             });
-          }
-        })
-        .catch(error => {
-          console.error('Failed to load videos:', error);
-        });
-  </script>
+
+            // Get article content for each video (from cache or generate new)
+            for (const video of processedVideos) {
+                const cachedContent = getFromCache(`content_${video.id}`);
+                if (cachedContent) {
+                    video.articleContent = cachedContent;
+                } else {
+                    // Generate new article content and cache it
+                    video.articleContent = await generateArticleContent(video.id);
+                    saveToCache(`content_${video.id}`, video.articleContent, CACHE_DURATION);
+                }
+            }
+
+            return processedVideos;
+        }
+
+        // Generate article content from video transcript using GPT
+        async function generateArticleContent(videoId, fallbackDescription = '') {
+    try {
+        const transcript = await fetchTranscript(videoId);
+        const article = await fetchGPTArticle(transcript);
+        return article;
+    } catch (error) {
+        console.error('Error generating article content:', error);
+        return fallbackDescription || 'No description available.';
+    }
+}
+            try {
+                // First get transcript
+                const transcript = await fetchTranscript(videoId);
+                
+                // Then generate article from transcript
+                const article = await fetchGPTArticle(transcript);
+                
+                return article;
+            } catch (error) {
+                console.error('Error generating article content:', error);
+                return 'Could not load article content. Please try again later.';
+            }
+        }
+
+        // Fetch transcript from your backend
+        async function fetchTranscript(videoId) {
+            const response = await fetch(`/api/transcript/${videoId}`);
+            if (!response.ok) throw new Error('Failed to fetch transcript');
+            return await response.text();
+        }
+
+        // Fetch GPT-generated article from your backend
+        async function fetchGPTArticle(transcript) {
+            const response = await fetch('/api/generate-article', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ transcript })
+            });
+            if (!response.ok) throw new Error('Failed to generate article');
+            const data = await response.json();
+            return data.article;
+        }
+
+        // Display videos on the page
+        function displayVideos(videos) {
+            newsContainer.innerHTML = '';
+            popularVideosList.innerHTML = '';
+
+            videos.forEach((video, index) => {
+                const isPopular = index < 5; // First 5 videos as "popular"
+                
+                // Create news card
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.innerHTML = `
+    <div class="news-content">
+        <h3>${video.title}</h3>
+        <div class="news-meta">
+            <span>${formatDate(video.publishedAt)}</span>
+            <span class="views"><i class="fas fa-eye"></i> ${formatNumber(video.views)}</span>
+        </div>
+        <div class="news-excerpt">
+            ${video.description ? truncateText(video.description, 300) : 'No description available.'}
+        </div>
+        <div class="video-container">
+            <iframe width="640" height="360" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+`;
+                newsContainer.appendChild(newsCard);
+
+                // Add to popular videos if marked as popular
+                if (isPopular) {
+                    const popularItem = document.createElement('li');
+                    popularItem.innerHTML = `
+                        <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank">
+                            <i class="fas fa-play"></i>
+                            ${truncateTitle(video.title)}
+                        </a>
+                    `;
+                    popularVideosList.appendChild(popularItem);
+                }
+            });
+
+        }
+
+        // Cache functions
+        function saveToCache(key, data, duration) {
+            const now = new Date().getTime();
+            const item = {
+                data: data,
+                expiry: now + duration
+            };
+            localStorage.setItem(key, JSON.stringify(item));
+        }
+
+        function getFromCache(key) {
+            const itemStr = localStorage.getItem(key);
+            if (!itemStr) return null;
+            
+            const item = JSON.parse(itemStr);
+            const now = new Date().getTime();
+            
+            if (now > item.expiry) {
+                localStorage.removeItem(key);
+                return null;
+            }
+            
+            return item.data;
+        }
+
+        // Helper functions
+        function formatNumber(num) {
+            return parseInt(num).toLocaleString();
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function truncateText(text, maxLength) {
+            if (!text) return '';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+
+        function truncateTitle(title) {
+            const maxLength = 50;
+            return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+        }
+
+        function showError() {
+            newsContainer.innerHTML = `
+                <div class="news-card">
+                    <div class="news-content" style="text-align: center; padding: 2rem;">
+                        <h3>Error Loading Content</h3>
+                        <p>We couldn't load the latest videos. Please try again later.</p>
+                        <a href="#" class="btn" onclick="loadVideos()">Retry</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.querySelector('.search-box input');
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                const newsCards = document.querySelectorAll('.news-card');
+                let resultsFound = false;
+
+                newsCards.forEach(card => {
+                    const title = card.querySelector('.news-content h3').textContent.toLowerCase();
+                    const excerpt = card.querySelector('.news-excerpt').textContent.toLowerCase();
+
+                    if (title.includes(query) || excerpt.includes(query)) {
+                        card.style.display = 'block';
+                        resultsFound = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                const message = document.getElementById('no-results-message');
+                message.style.display = resultsFound ? 'none' : 'block';
+            });
+        }
+
+        // About Us and Notification toggles
+        function showAboutUsContent(event) {
+            event.preventDefault();
+            const contents = document.querySelectorAll('.notification-content');
+            const content = contents[0];
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showNotificationContent() {
+            const contents = document.querySelectorAll('.notification-content');
+            const content = contents[1];
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function initApp() {
+            await loadVideos();
+            fetchSubscriberCount();
+            setupSearch();
+        }
+        initApp();
+    </script>
 </body>
 </html>
