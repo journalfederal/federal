@@ -112,7 +112,7 @@
         }
         
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1200x400/1e1e1e/8e8e93');
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('banner.jpg');
             background-size: cover;
             background-position: center;
             height: 400px;
@@ -640,8 +640,8 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo" onclick="loadHomePage()" style="cursor: pointer;">
-                    <img src="static/journal.png">
+                <div class="logo" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" style="cursor: pointer;">
+                    <img src="journal.png" alt="Journal Federal Logo">
                 </div>
                 <div class="subscriber-info" id="subscriberInfo">
                     <i class="fab fa-youtube"></i>
@@ -652,8 +652,11 @@
                 <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
                 <nav>
                     <ul id="mainMenu">
-                        <li><a href="#" class="btn subscribe-animate">Subscribe</a></li>
-                        <li><a href="#" class="btn btn-outline">Watch Live</a></li>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <a href="javascript:void(0)" class="btn subscribe-animate">Subscribe</a>
+                            <a href="javascript:void(0)" class="btn btn-outline">Watch Live</a>
+                            <img src="https://flagcdn.com/us.svg" alt="US Flag" style="height: 24px; margin-left: 10px;">
+                        </div>
                     </ul>
                 </nav>
             </div>
@@ -661,16 +664,6 @@
     </header>
 
     <div id="app-content">
-        <section class="hero">
-            <div class="hero-content">
-                <h1>US Political & Economic News</h1>
-                <p>Comprehensive coverage and analysis of the latest developments in US politics and economy</p>
-                <div class="btn-group">
-                    <a href="#" class="btn">Latest Videos</a>
-                    <a href="#" class="btn btn-outline">Trending Analysis</a>
-                </div>
-            </div>
-        </section>
 
         <div class="container">
             <div class="main-content">
@@ -702,20 +695,20 @@
                     <div class="sidebar-card subscribe-box">
                         <h4>Get Notified About New Videos</h4>
                         <p>Subscribe to our YouTube channel for the latest US political and economic news analysis.</p>
-                        <a href="#" class="btn">Subscribe Now</a>
+                        <a href="javascript:void(0)" class="btn">Subscribe Now</a>
                     </div>
 
                     <div class="sidebar-card subscribe-box">
                         <h4>About Us and Contact Information</h4>
                         <p>Click here to learn more about us and get in touch with our team.</p>
-                        <a href="#" class="btn" onclick="showAboutUsContent(event)">Click for Info</a>
-                        <div class="notification-content" style="display: none; margin-top: 1rem;">
+                        <button class="btn" type="button">Our Info</button>
+                        <div class="notification-content" style="margin-top: 1rem;">
                             <h5>About Us</h5>
                             <p>Welcome to Journal Federal! We provide in-depth coverage and analysis of US political and economic news to keep our audience informed of the latest developments.</p>
                             <h5>Contact Information</h5>
                             <ul>
-                                <li><strong>Email:</strong> <a href="mailto:news@journalfederal.com">news@journalfederal.com</a></li>
-                                <li><strong>Phone:</strong> <a href="tel:+13072038452">+1 (307) 203-8452</a></li>
+                                <li><strong>Email:</strong> <a href="mailto:news@journalfederal.com" style="color: #d2232a;">news@journalfederal.com</a></li>
+                                <li><strong>Phone:</strong> <a href="tel:+13072038452" style="color: #d2232a;">+1 (307) 203-8452</a></li>
                                 <li><strong>Address:</strong> 30 N Gould St Ste 41801, Sheridan, WY 82801</li>
                             </ul>
                         </div>
@@ -724,8 +717,8 @@
                     <div class="sidebar-card subscribe-box" id="notification-box">
                         <h4>Receive Updates</h4>
                         <p>Click here for the latest updates.</p>
-                        <a href="#" class="btn" onclick="showNotificationContent()">Click for Info</a>
-                        <div class="notification-content" style="display: none; margin-top: 1rem;">
+                        <button class="btn" type="button">Our Info</button>
+                        <div class="notification-content" style="margin-top: 1rem;">
                             <p>Here is the content of the new updates!</p>
                         </div>
                     </div>
@@ -750,13 +743,7 @@
                     </div>
                 </div>
                 <div class="footer-column">
-                    <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Latest Videos</a></li>
-                        <li><a href="#">Trending Analysis</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -777,7 +764,7 @@
 
     <script>
         // YouTube API Configuration
-        const API_KEY = 'AIzaSyC0Bu1yl_iOzZvH4ryUpxJ-wnflP5bP1G8';
+        const API_KEY = 'AIzaSyBXkKGLBC28wc1t5ESGwhKkiFOQtNQZC-E';
         const CHANNEL_ID = 'UC5HDiPPo2O_y2LLAjh_o6wQ';
         const CACHE_DURATION = 3600 * 1000; // 1 hour cache
 
@@ -793,6 +780,12 @@
             mainMenu.classList.toggle('active');
         });
 
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSubscriberCount();
+            loadVideos();
+            setupSearch();
+        });
 
         // YouTube Subscriber Count
         async function fetchSubscriberCount() {
@@ -836,12 +829,8 @@
                     displayVideos(cachedVideos);
                     return;
                 }
- 
+
                 const videos = await fetchYouTubeVideos();
-                if (!videos || !videos.items || videos.items.length === 0) {
-                    throw new Error("No videos returned from YouTube API.");
-                }
- 
                 const processedVideos = await processVideos(videos);
                 saveToCache('videos', processedVideos, CACHE_DURATION);
                 displayVideos(processedVideos);
@@ -853,16 +842,14 @@
 
         // Fetch videos from YouTube
         async function fetchYouTubeVideos() {
+            // Get channel's upload playlist ID
             const channelResponse = await fetch(
                 `https://www.googleapis.com/youtube/v3/channels?key=${API_KEY}&id=${CHANNEL_ID}&part=contentDetails`
             );
             const channelData = await channelResponse.json();
- 
-            const uploadsPlaylistId = channelData?.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
-            if (!uploadsPlaylistId) {
-                throw new Error("Uploads playlist ID not found.");
-            }
- 
+            const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+            
+            // Get videos from uploads playlist
             const videosResponse = await fetch(
                 `https://www.googleapis.com/youtube/v3/playlistItems?key=${API_KEY}&playlistId=${uploadsPlaylistId}&part=snippet&maxResults=20`
             );
@@ -912,16 +899,7 @@
         }
 
         // Generate article content from video transcript using GPT
-        async function generateArticleContent(videoId, fallbackDescription = '') {
-    try {
-        const transcript = await fetchTranscript(videoId);
-        const article = await fetchGPTArticle(transcript);
-        return article;
-    } catch (error) {
-        console.error('Error generating article content:', error);
-        return fallbackDescription || 'No description available.';
-    }
-}
+        async function generateArticleContent(videoId) {
             try {
                 // First get transcript
                 const transcript = await fetchTranscript(videoId);
@@ -969,20 +947,23 @@
                 const newsCard = document.createElement('div');
                 newsCard.className = 'news-card';
                 newsCard.innerHTML = `
-    <div class="news-content">
-        <h3>${video.title}</h3>
-        <div class="news-meta">
-            <span>${formatDate(video.publishedAt)}</span>
-            <span class="views"><i class="fas fa-eye"></i> ${formatNumber(video.views)}</span>
-        </div>
-        <div class="news-excerpt">
-            ${video.description ? truncateText(video.description, 300) : 'No description available.'}
-        </div>
-        <div class="video-container">
-            <iframe width="640" height="360" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
-`;
+                    <div class="news-content">
+                        <h3>${video.title}</h3>
+                        <div class="news-meta">
+                            <span>${formatDate(video.publishedAt)}</span>
+                            <span class="views"><i class="fas fa-eye"></i> ${formatNumber(video.views)}</span>
+                        </div>
+                        <a href="#" class="read-more-btn" data-video="${video.id}">Read more <i class="fas fa-chevron-right"></i></a>
+                        <div class="hidden-content" id="content-${video.id}" style="display: none;">
+                        ${video.description.length > 200 
+                          ? `${video.description.slice(0, 200)}<span class="extra-description" style="display: none;">${video.description.slice(200)}</span>` 
+                          : video.description}
+                        </div>
+                        <div class="video-container">
+                            <iframe width="640" height="360" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `;
                 newsContainer.appendChild(newsCard);
 
                 // Add to popular videos if marked as popular
@@ -998,6 +979,29 @@
                 }
             });
 
+            // Add event listeners for read more buttons
+            document.querySelectorAll('.read-more-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const videoId = this.getAttribute('data-video');
+                    const contentEl = document.getElementById(`content-${videoId}`);
+                    const icon = this.querySelector('i');
+
+                    if (!contentEl) return;
+
+                    if (contentEl.style.display === 'block') {
+                        contentEl.style.display = 'none';
+                        const extraText = contentEl.querySelector('.extra-description');
+                        if (extraText) extraText.style.display = 'none';
+                        this.innerHTML = 'Read more <i class="fas fa-chevron-right"></i>';
+                    } else {
+                        contentEl.style.display = 'block';
+                        const extraText = contentEl.querySelector('.extra-description');
+                        if (extraText) extraText.style.display = 'inline';
+                        this.innerHTML = 'Show less <i class="fas fa-chevron-down"></i>';
+                    }
+                });
+            });
         }
 
         // Cache functions
@@ -1056,7 +1060,7 @@
                     <div class="news-content" style="text-align: center; padding: 2rem;">
                         <h3>Error Loading Content</h3>
                         <p>We couldn't load the latest videos. Please try again later.</p>
-                        <a href="#" class="btn" onclick="loadVideos()">Retry</a>
+                        <a href="javascript:void(0)" class="btn" onclick="loadVideos()">Retry</a>
                     </div>
                 </div>
             `;
@@ -1072,7 +1076,7 @@
 
                 newsCards.forEach(card => {
                     const title = card.querySelector('.news-content h3').textContent.toLowerCase();
-                    const excerpt = card.querySelector('.news-excerpt').textContent.toLowerCase();
+                    const excerpt = card.querySelector('.news-excerpt') ? card.querySelector('.news-excerpt').textContent.toLowerCase() : '';
 
                     if (title.includes(query) || excerpt.includes(query)) {
                         card.style.display = 'block';
@@ -1087,26 +1091,46 @@
             });
         }
 
-        // About Us and Notification toggles
-        function showAboutUsContent(event) {
-            event.preventDefault();
-            const contents = document.querySelectorAll('.notification-content');
-            const content = contents[0];
-            content.style.display = content.style.display === 'none' ? 'block' : 'none';
-        }
+        // About Us and Notification toggles (disabled)
+        // function showAboutUsContent(event) {
+        //     event.preventDefault();
+        //     const contents = document.querySelectorAll('.notification-content');
+        //     const content = contents[0];
+        //     content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        // }
 
-        function showNotificationContent() {
-            const contents = document.querySelectorAll('.notification-content');
-            const content = contents[1];
-            content.style.display = content.style.display === 'none' ? 'block' : 'none';
-        }
+        // function showNotificationContent() {
+        //     const contents = document.querySelectorAll('.notification-content');
+        //     const content = contents[1];
+        //     content.style.display = content.style.display === 'none' ? 'block' : 'none';
+        // }
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
 
-        async function initApp() {
-            await loadVideos();
-            fetchSubscriberCount();
-            setupSearch();
-        }
-        initApp();
+    window.onscroll = function() {
+        scrollTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
+    };
+
+    scrollTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
     </script>
+    <button id="scrollTopBtn" title="Go to top" style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 999;
+        font-size: 18px;
+        border: none;
+        outline: none;
+        background-color: var(--primary-color);
+        color: white;
+        cursor: pointer;
+        padding: 12px 16px;
+        border-radius: 50%;
+        display: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    ">
+        ↑
+    </button>
 </body>
 </html>
