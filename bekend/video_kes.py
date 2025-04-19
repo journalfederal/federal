@@ -3,11 +3,20 @@ from flask_cors import CORS
 import yt_dlp
 import subprocess
 import os
+from urllib.parse import urlparse, parse_qs
 
 app = Flask(__name__)
 CORS(app)
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+def extract_youtube_id(url):
+    query = urlparse(url)
+    if "youtube" in query.netloc:
+        return parse_qs(query.query).get("v", [None])[0]
+    if "youtu.be" in query.netloc:
+        return query.path.lstrip("/")
+    return None
 
 @app.route("/kes-ve-indir", methods=["POST"])
 def kes_ve_indir():
@@ -58,8 +67,10 @@ def kes_ve_indir():
 
         cmd = [
             "yt-dlp",
-            "--download-sections", duration_section,
-            "-f", "mp4",
+            "--download-sections", f"*{start}-{end}",
+            "--remux-video", "mp4",
+            "--force-keyframes-at-cuts",
+            "-f", "bv*+ba/b",
             "-o", clipped_path,
             url
         ]
@@ -69,8 +80,14 @@ def kes_ve_indir():
         return jsonify({"error": f"yt-dlp kesme hatası: {str(e)}"}), 500
 
     print("✅ yt-dlp kesimi tamamlandı:", clipped_path)
-    print("📦 Dosya gönderiliyor...")
-    return send_file(clipped_path, as_attachment=True, download_name=f"{output_name}.mp4")
+    video_id = extract_youtube_id(url)
+    thumbnail_url = f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
+    return jsonify({
+        "success": True,
+        "video_path": clipped_path,
+        "download_name": f"{output_name}.mp4",
+        "thumbnail": thumbnail_url
+    })
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
