@@ -76,7 +76,7 @@ def kes_ve_indir():
             "yt-dlp",
             "--cookies", "cookies.txt",
             "--download-sections", f"*{start}-{end}",
-            "--remux-video", "mp4",
+            "--merge-output-format", "mp4",
             "--force-keyframes-at-cuts",
             "-f", "bv*+ba/b",
             "-o", clipped_path,
