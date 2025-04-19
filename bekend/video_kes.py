@@ -3,7 +3,6 @@ from flask_cors import CORS
 import yt_dlp
 import subprocess
 import os
-import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -29,7 +28,7 @@ def kes_ve_indir():
 
     # Unique filenames
     download_template = os.path.join(DOWNLOAD_DIR, f"{output_name}.%(ext)s")
-    clipped_path = os.path.join(DOWNLOAD_DIR, f"{output_name}_clip.mp4")
+    clipped_path = os.path.join(DOWNLOAD_DIR, f"{output_name}.mp4")
 
     # Download full video
     ydl_opts = {
@@ -51,25 +50,25 @@ def kes_ve_indir():
 
     print("✅ Video indirildi:", downloaded_path)
 
-    # ffmpeg kesme
+    # yt-dlp kesme
     try:
-        print("✂️  ffmpeg kesmeye başlıyor...")
-        duration = end - start
+        print("✂️  yt-dlp doğrudan kesmeye başlıyor...")
+        duration_section = f"*{start}-{end}"
+        clipped_path = os.path.join(DOWNLOAD_DIR, f"{output_name}.mp4")
+
         cmd = [
-            "ffmpeg", "-y",
-            "-i", downloaded_path,
-            "-ss", str(start),
-            "-t", str(duration),
-            "-c", "copy",
-            "-movflags", "+faststart",
-            clipped_path
+            "yt-dlp",
+            "--download-sections", duration_section,
+            "-f", "mp4",
+            "-o", clipped_path,
+            url
         ]
         result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        print("FFmpeg çıktı:", result.stderr)
+        print("yt-dlp çıktı:", result.stderr)
     except Exception as e:
-        return jsonify({"error": f"FFmpeg kesme hatası: {str(e)}"}), 500
+        return jsonify({"error": f"yt-dlp kesme hatası: {str(e)}"}), 500
 
-    print("✅ ffmpeg kesimi tamamlandı:", clipped_path)
+    print("✅ yt-dlp kesimi tamamlandı:", clipped_path)
     print("📦 Dosya gönderiliyor...")
     return send_file(clipped_path, as_attachment=True, download_name=f"{output_name}.mp4")
 

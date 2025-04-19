@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, render_template_string
+from bekend.video_kes import kes_ve_indir
 
 app = Flask(__name__, template_folder='.', static_folder='static')
 
@@ -29,6 +30,10 @@ def unicpro():
             <button type="submit" style="margin-left:10px; padding:0.5rem 1.2rem;">Enter</button>
         </form>
     '''
+
+@app.route("/kes-ve-indir", methods=["POST"])
+def kes_ve_indir_route():
+    return kes_ve_indir()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
