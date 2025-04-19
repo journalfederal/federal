@@ -33,7 +33,7 @@ def kes_ve_indir():
 
     # Download full video
     ydl_opts = {
-        "format": "best",
+        "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4",
         "outtmpl": download_template,
         "quiet": True,
     }
@@ -64,7 +64,8 @@ def kes_ve_indir():
             "-movflags", "+faststart",
             clipped_path
         ]
-        subprocess.run(cmd, check=True)
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print("FFmpeg çıktı:", result.stderr)
     except Exception as e:
         return jsonify({"error": f"FFmpeg kesme hatası: {str(e)}"}), 500
 
