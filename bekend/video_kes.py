@@ -57,12 +57,11 @@ def kes_ve_indir():
         duration = end - start
         cmd = [
             "ffmpeg", "-y",
-            "-ss", str(start),
             "-i", downloaded_path,
+            "-ss", str(start),
             "-t", str(duration),
-            "-c:v", "libx264",
-            "-c:a", "aac",
-            "-strict", "experimental",
+            "-c", "copy",
+            "-movflags", "+faststart",
             clipped_path
         ]
         subprocess.run(cmd, check=True)
