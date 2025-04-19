@@ -67,6 +67,7 @@ def kes_ve_indir():
 
         cmd = [
             "yt-dlp",
+            "--cookies", "cookies.txt",
             "--download-sections", f"*{start}-{end}",
             "--remux-video", "mp4",
             "--force-keyframes-at-cuts",
