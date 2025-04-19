@@ -552,7 +552,7 @@ function updateTotalDurationFromList() {
             document.getElementById('download-progress').style.display = 'none';
 
             // Arka uç (backend) POST isteği gönderiliyor
-            fetch("http://127.0.0.1:5001/kes-ve-indir", {
+            fetch("/kes-ve-indir", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ url: videoUrl, start: startSeconds, end: endSeconds, outputName: outputName })
@@ -627,7 +627,7 @@ function updateTotalDurationFromList() {
     label.textContent = "Seslendirme oluşturuluyor...";
     console.log("Gönderilen veri:", { text, voice, filename });
 
-    fetch("http://127.0.0.1:5001/seslendir", {
+    fetch("/seslendir", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text, voice, filename })
