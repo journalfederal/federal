@@ -5,6 +5,7 @@ import shutil
 print("🧪 yt-dlp PATH kontrolü:", shutil.which("yt-dlp"))
 import subprocess
 import os
+cookies_path = os.path.join(os.path.dirname(__file__), "cookies.txt")
 from urllib.parse import urlparse, parse_qs
 
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def parse_time(t):
 @app.route("/kes-ve-indir", methods=["POST"])
 def kes_ve_indir():
     print("✅ /kes-ve-indir endpoint'e istek geldi")
-    print("🍪 Cookies dosyası mevcut mu?", os.path.exists("cookies.txt"))
+    print("🍪 Cookies dosyası mevcut mu?", os.path.exists(cookies_path))
     print("📂 Dosya listesi (bekend):", os.listdir("."))
     print("📂 Dosya listesi (downloads):", os.listdir("downloads") if os.path.exists("downloads") else "downloads klasörü yok")
     data = request.get_json()
@@ -80,7 +81,7 @@ def kes_ve_indir():
             "download_sections": [duration_section],
             "merge_output_format": "mp4",
             "outtmpl": clipped_path,
-            "cookies": "cookies.txt",
+            "cookies": cookies_path,
             "quiet": True
         }
         with yt_dlp.YoutubeDL(clip_opts) as ydl:
