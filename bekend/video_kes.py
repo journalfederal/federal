@@ -56,11 +56,13 @@ def kes_ve_indir():
         print("✂️  ffmpeg kesmeye başlıyor...")
         duration = end - start
         cmd = [
-            "ffmpeg", "-y", 
-            "-i", downloaded_path,
+            "ffmpeg", "-y",
             "-ss", str(start),
+            "-i", downloaded_path,
             "-t", str(duration),
-            "-c", "copy",
+            "-c:v", "libx264",
+            "-c:a", "aac",
+            "-strict", "experimental",
             clipped_path
         ]
         subprocess.run(cmd, check=True)
