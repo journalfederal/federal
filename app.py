@@ -8,7 +8,7 @@ def home():
 
 @app.route('/unicpro', methods=['GET', 'POST'])
 def unicpro():
-    PASSWORD = "unic2025"  # Change this password as needed
+    PASSWORD = "14785200"  # Change this password as needed
 
     if request.method == 'POST':
         password = request.form.get('password')
