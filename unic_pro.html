@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIC PRO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    /* Tema ve renk ayarları için değişkenler */
+    :root {
+            --dark-bg: #363636;
+            --light-bg: #222222;
+            --menu-bg: #6a0dad;
+            --hover-color: #6a0dad;
+            --text-color: #ffffff;
+        }
+        
+        /* Genel stil sıfırlama ve font ayarları */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Ana sayfa düzeni: Arka plan ve temel layout ayarları */
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sol Menü: Navigasyon için yan panel */
+        .sidebar {
+            width: 200px;
+            background-color: var(--light-bg);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .menu {
+            width: 100%;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        /* Ana İçerik: Sayfa içeriği ve scroll ayarları */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .page {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Form Elemanları */
+        textarea, input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #ffffff;
+            border: 1px solid #a90077;
+            color: rgb(0, 0, 0);
+            border-radius: 4px;
+        }
+        
+        button {
+            background-color: var(--menu-bg);
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 10px 20px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .file-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .file-list li {
+            padding: 8px;
+            background-color: #ffffff;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+    /* Video İşleme Barı: İşlem ilerlemesini göstermek için */
+    .task-block {
+        display: block;
+        margin: 30px 0 !important;
+        padding: 20px;
+        background-color: #333131;
+        border: 2px solid #6a0dad;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .task-block .processing-label {
+        color: rgb(240, 240, 240);
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+    .task-block .processing-bar-container {
+        background-color: #333;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .task-block .processing-bar {
+        width: 5%;
+        height: 20px;
+        background-color: #6a0dad;
+        transition: width 0.3s ease-in-out;
+    }
+    </style>
+</head>
+<body>
+    <!-- Sol Menü -->
+    <!-- Sol Menü Başlangıcı -->
+    <div class="sidebar">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="UNIC PRO Logo" class="logo">
+        <div class="menu">
+            <div class="menu-item" onclick="showPage('video-kes')">
+                <i class="fas fa-cut"></i> Video Kes
+            </div>
+            <div class="menu-item" onclick="showPage('seslendirme')">
+                <i class="fas fa-microphone"></i> Seslendirme
+            </div>
+            <div class="menu-item" onclick="showPage('transkript')">
+                <i class="fas fa-file-alt"></i> Transkript
+            </div>
+            <div class="menu-item" onclick="showPage('birlesitir')">
+                <i class="fas fa-object-group"></i> Birleştir
+            </div>
+            <div class="menu-item" onclick="showPage('altyazi')">
+                <i class="fas fa-closed-captioning"></i> Altyazı
+            </div>
+            <div class="menu-item" onclick="showPage('karakter-sayaci')">
+                <i class="fas fa-text-width"></i> Karakter Sayacı
+            </div>
+            <div class="menu-item" onclick="showPage('metin-bolucu')">
+                <i class="fas fa-align-left"></i> Metin Bölücü
+            </div>
+            <div class="menu-item" onclick="showPage('editor')">
+                <i class="fas fa-edit"></i> Editör
+            </div>
+        </div>
+    </div>
+    <!-- Ana İçerik Bitişi -->
+    <!-- Sol Menü Bitişi -->
+    <div id="top-right-title" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
+        z-index: 999;
+        background-color: rgba(106, 13, 173, 0.8);
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    ">
+        UNIC PRO
+    </div>
+    
+    <!-- Ana İçerik -->
+    <!-- Ana İçerik Başlangıcı -->
+    <div class="main-content">
+        <div class="header">
+            <h1>UNIC PRO</h1>
+        </div>
+        
+        <!-- Sayfalar -->
+        <div id="video-kes" class="page">
+            <h2><i class="fas fa-cut"></i> Video Kes</h2>
+            <input type="text" id="video-upload" placeholder="YouTube video linki girin...">
+            <div style="margin: 10px 0;">
+                <button onclick="pasteClipboard()">Yapıştır</button>
+                <button onclick="clearVideoLink()">Sil</button>
+            </div>
+            <div id="video-preview" style="margin: 20px 0;"></div>
+            <div>
+                <label>Başlangıç Zamanı:</label><br>
+                <input type="number" id="start-hours" min="0" placeholder="Saat" style="width: 30%; display: inline-block;">
+                <input type="number" id="start-minutes" min="0" max="59" placeholder="Dakika" style="width: 30%; display: inline-block; margin-left: 5px;">
+                <input type="number" id="start-seconds" min="0" max="59" placeholder="Saniye" style="width: 30%; display: inline-block; margin-left: 5px;">
+            </div>
+            <div>
+                <label>Bitiş Zamanı:</label><br>
+                <input type="number" id="end-hours" min="0" placeholder="Saat" style="width: 30%; display: inline-block;">
+                <input type="number" id="end-minutes" min="0" max="59" placeholder="Dakika" style="width: 30%; display: inline-block; margin-left: 5px;">
+                <input type="number" id="end-seconds" min="0" max="59" placeholder="Saniye" style="width: 30%; display: inline-block; margin-left: 5px;">
+            </div>
+            <label for="output-name">Dosya Adı:</label>
+            <input type="text" id="output-name" placeholder="örn: benimvideo">
+            <button onclick="cutAndDownload()">Kes ve İndir</button>
+            
+            <!-- Video İşleme İlerleme Çubuğu Başlangıcı -->
+            <div id="processing-progress-container" style="position: fixed; bottom: 70px; right: 20px; width: 320px; z-index: 999;"></div>
+            <!-- Video İşleme İlerleme Çubuğu Bitişi -->
+            <!-- İndirilenler Paneli -->
+            <div id="download-history" style="margin-top: 30px; background-color: #1e1e1e; padding: 15px; border-radius: 10px; border: 2px solid #6a0dad;">
+              <h3 style="color: white; margin-bottom: 10px;">İndirilenler</h3>
+              <ul id="download-list" style="list-style: none; padding: 0; color: white;"></ul>
+              <p id="total-duration-display" style="color: #ccc; margin-top: 10px; font-weight: bold;">
+                Toplam biriktirilen video süresi: 00:00:00
+              </p>
+              <button onclick="clearHistory()">Geçmişi Sil</button>
+            </div>
+        </div>
+        
+        <div id="seslendirme" class="page">
+            <h2><i class="fas fa-microphone"></i> Seslendirme</h2>
+            <textarea id="text-to-speech" rows="10" placeholder="Seslendirmek istediğiniz metni girin..."></textarea>
+            <div id="speech-character-count" style="font-size: 18px; margin: 10px 0;">
+                Karakter Sayısı: 0
+            </div>
+            <div>
+              <label for="voice-select">Ses:</label>
+              <select id="voice-select">
+                <option value="VR6AewLTigWG4xSOukaG">Arnold</option>
+              </select>
+            </div>
+            <button onclick="speakText()">Seslendir</button>
+            <button onclick="stopSpeech()">Durdur</button>
+            <button onclick="saveAudio()">Ses Dosyası Olarak Kaydet</button>
+            <br><br>
+            <audio id="audio-preview" controls style="
+                width: 100%;
+                max-width: 500px;
+                margin-top: 10px;
+                background-color: #1e1e1e;
+                border: 2px solid #6a0dad;
+                border-radius: 10px;
+                padding: 6px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.6);
+            ">
+                Your browser does not support the audio element.
+            </audio>
+            <div id="speech-history" style="margin-top: 30px; background-color: #1e1e1e; padding: 15px; border-radius: 10px; border: 2px solid #6a0dad;">
+              <h3 style="color: white; margin-bottom: 10px;">Seslendirilenler</h3>
+              <ul id="speech-list" style="list-style: none; padding: 0; color: white;"></ul>
+            </div>
+            <div id="speech-progress" style="display: none; margin-top: 15px;">
+                <div style="background-color: #333; border-radius: 6px; overflow: hidden;">
+                    <div id="speech-progress-bar" style="width: 0%; height: 20px; background-color: #6a0dad;"></div>
+                </div>
+                <p id="speech-progress-label" style="text-align: center; margin-top: 5px; color: white; font-weight: bold;">
+                    Seslendirme oluşturuluyor...
+                </p>
+            </div>
+        </div>
+        
+        <div id="transkript" class="page">
+            <h2><i class="fas fa-file-alt"></i> Transkript</h2>
+            <input type="file" id="audio-upload" accept="audio/*">
+            <div id="audio-player" style="margin: 10px 0;"></div>
+            <button onclick="startTranscription()">Transkript Başlat</button>
+            <div id="transcript-result" style="margin-top: 20px;">
+                <h3>Transkript Sonucu:</h3>
+                <textarea id="transcript-text" rows="10" readonly></textarea>
+            </div>
+            <button onclick="saveTranscript()">TXT Olarak Kaydet</button>
+        </div>
+        
+        <div id="birlesitir" class="page">
+            <h2><i class="fas fa-object-group"></i> Video Birleştir</h2>
+            <input type="file" id="merge-files" accept="video/*" multiple>
+            <button onclick="addFiles()">Videoları Ekle</button>
+            <ul id="file-list" class="file-list"></ul>
+            <button onclick="mergeVideos()">Videoları Birleştir</button>
+            <div id="merge-preview" style="margin-top: 20px;"></div>
+            <button onclick="downloadMerged()">İndir</button>
+        </div>
+        
+        <div id="altyazi" class="page">
+            <h2><i class="fas fa-closed-captioning"></i> Altyazı</h2>
+            <input type="file" id="subtitle-video" accept="video/*">
+            <div id="subtitle-preview" style="margin: 10px 0;"></div>
+            <div>
+                <label>Altyazı Dosyası (.srt):</label>
+                <input type="file" id="srt-file" accept=".srt">
+            </div>
+            <button onclick="loadSubtitles()">Altyazıları Yükle</button>
+            <button onclick="saveVideoWithSubtitles()">Videoyu Kaydet</button>
+        </div>
+        
+        <div id="karakter-sayaci" class="page active">
+            <h2><i class="fas fa-text-width"></i> Karakter Sayacı</h2>
+            <textarea id="character-text" rows="10" placeholder="Metni buraya yazın..."></textarea>
+            <div id="character-count" style="font-size: 18px; margin: 10px 0;">
+                Karakter Sayısı: 0
+            </div>
+            <button onclick="copyText()">Metni Kopyala</button>
+            <button onclick="clearText()">Temizle</button>
+        </div>
+        
+        <div id="metin-bolucu" class="page">
+            <h2><i class="fas fa-align-left"></i> Metin Bölücü</h2>
+            <textarea id="text-to-split" rows="10" placeholder="Bölmek istediğiniz metni girin..."></textarea>
+            <div>
+                <label>Parça Sayısı:</label>
+                <input type="number" id="split-count" min="1" value="3">
+            </div>
+            <button onclick="splitText()">Metni Böl</button>
+            <div id="split-results" style="margin-top: 20px;"></div>
+        </div>
+        
+        <div id="editor" class="page">
+            <h2><i class="fas fa-edit"></i> Metin Editörü</h2>
+            <div id="toolbar" style="margin-bottom: 10px;">
+                <button onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                <button onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                <button onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                <select id="font-size" onchange="changeFontSize()">
+                    <option value="12px">12px</option>
+                    <option value="14px">14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="24px">24px</option>
+                </select>
+                <input type="color" id="text-color" onchange="changeTextColor()">
+            </div>
+            <div id="text-editor" contenteditable="true" style="
+                min-height: 300px; 
+                padding: 15px; 
+                background-color: #626262; 
+                border-radius: 5px;
+                border: 1px solid #666;
+            "></div>
+            <button onclick="saveTextFile()">TXT Olarak Kaydet</button>
+            <button onclick="saveHtmlFile()">HTML Olarak Kaydet</button>
+        </div>
+    </div>
+
+    <script>
+        // YouTube video linkinden thumbnail gösterimi
+        document.getElementById('video-upload').addEventListener('input', function(event) {
+            const videoUrl = event.target.value.trim();
+            const videoId = extractYouTubeId(videoUrl);
+            // Mevcut ilerleme çubuklarını gizle ve sıfırla
+            document.getElementById('download-progress').style.display = 'none';
+            document.getElementById('download-bar').style.width = '0%';
+            document.getElementById('download-label').textContent = 'İlerleme: 0%';
+            document.getElementById('processing-progress-container').innerHTML = '';
+
+            if (!videoUrl) {
+                // Boş link: Banner göster
+                document.getElementById('video-preview').innerHTML = `
+                    <img 
+                      src="{{ url_for('static', filename='BANNER.png') }}" 
+                      alt="Beklenen video kapağı" 
+                      style="max-width: 100%; max-height: 250px; object-fit: cover; display: block; margin: auto; border-radius: 8px;">
+                `;
+            } else if (videoId) {
+                // Geçerli YouTube linki: Thumbnail göster
+                const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                document.getElementById('video-preview').innerHTML = `
+                    <img 
+                      src="${thumbnailUrl}" 
+                      alt="Video Thumbnail" 
+                      style="max-width: 100%; max-height: 250px; border-radius: 8px; object-fit: cover; display: block; margin: auto;">
+                `;
+            } else {
+                // Geçersiz link: Banner göster
+                document.getElementById('video-preview').innerHTML = `
+                    <img 
+                      src="BANNER.png" 
+                      alt="Beklenen video kapağı" 
+                      style="max-width: 100%; max-height: 250px; object-fit: cover; display: block; margin: auto; border-radius: 8px;">
+                `;
+            }
+        });
+
+        function extractYouTubeId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.*\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        let totalAccumulatedSeconds = 0;
+
+        // Sayfa geçişleri
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            document.querySelector('.header h1').textContent = document.querySelector(`.menu-item[onclick="showPage('${pageId}')"]`).textContent.trim();
+        }
+        
+        // Karakter Sayacı
+        document.getElementById('character-text').addEventListener('input', function() {
+            const count = this.value.length;
+            document.getElementById('character-count').textContent = `Karakter Sayısı: ${count}`;
+        });
+        
+        // Seslendirme metin karakter sayacı
+        document.getElementById('text-to-speech').addEventListener('input', function() {
+            const length = this.value.length;
+            document.getElementById('speech-character-count').textContent = `Karakter Sayısı: ${length}`;
+        });
+        
+        function copyText() {
+            const text = document.getElementById('character-text');
+            text.select();
+            document.execCommand('copy');
+            alert('Metin kopyalandı!');
+        }
+        
+        function clearText() {
+            document.getElementById('character-text').value = '';
+            document.getElementById('character-count').textContent = 'Karakter Sayısı: 0';
+        }
+        
+        // Diğer işlevler için placeholder fonksiyonlar
+        function cutVideo() { alert('Video kesme işlemi başlatıldı'); }
+
+        function formatTime(seconds) {
+            seconds = Number(seconds);
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+        return [
+            hrs.toString().padStart(2, '0'),
+            mins.toString().padStart(2, '0'),
+            secs.toString().padStart(2, '0')
+        ].join(':');
+    }
+
+function updateTotalDurationFromList() {
+    let total = 0;
+    const spans = document.querySelectorAll('#download-list li div');
+    spans.forEach(div => {
+        const match = div.innerText.match(/Toplam video süresi:\s*(\d+)s/);
+        if (match) {
+            total += parseInt(match[1]);
+        }
+    });
+    totalAccumulatedSeconds = total;
+    document.getElementById("total-duration-display").textContent =
+        "Toplam biriktirilen video süresi: " + formatTime(total);
+    localStorage.setItem("totalSeconds", total.toString());
+}
+
+        function cutAndDownload() {
+            const videoUrl = document.getElementById('video-upload').value.trim();
+        // Zaman hesaplama: Başlangıç saniyelerinin hesaplanması
+        const startSeconds =
+                parseInt(document.getElementById('start-hours').value || 0) * 3600 +
+                parseInt(document.getElementById('start-minutes').value || 0) * 60 +
+                parseInt(document.getElementById('start-seconds').value || 0);
+            const endSeconds =
+                parseInt(document.getElementById('end-hours').value || 0) * 3600 +
+                parseInt(document.getElementById('end-minutes').value || 0) * 60 +
+                parseInt(document.getElementById('end-seconds').value || 0);
+            if (!videoUrl || endSeconds <= startSeconds) {
+                alert("Lütfen geçerli bir link ve zaman aralığı girin!");
+                return;
+            }
+
+            const outputName = document.getElementById('output-name').value.trim() || "kesilmis-video";
+            const totalDuration = endSeconds - startSeconds;
+            // Removed old logic; total duration will be recalculated from the download list.
+            // totalAccumulatedSeconds += totalDuration;
+            // document.getElementById("total-duration-display").textContent =
+            //     "Toplam biriktirilen video süresi: " + formatTime(totalAccumulatedSeconds);
+            // localStorage.setItem("downloadList", document.getElementById("download-list").innerHTML);
+            // localStorage.setItem("totalSeconds", totalAccumulatedSeconds.toString());
+            const downloadingItem = document.createElement('li');
+            downloadingItem.innerHTML = `
+  <div style="padding: 10px; border: 1px solid #6a0dad; border-radius: 6px; margin-bottom: 12px; background-color: #2e2e2e;">
+    <strong>Dosya:</strong> ${outputName}.mp4<br>
+    <strong>Durum:</strong> <span class="download-status" style="color: yellow;">İndiriliyor...</span><br>
+    <strong>Başlangıç:</strong> ${formatTime(startSeconds)} (ss:dd:sn) | <strong>Bitiş:</strong> ${formatTime(endSeconds)} (ss:dd:sn)<br>
+    <strong>Toplam video süresi:</strong> ${totalDuration}s
+  </div>
+`;
+            document.getElementById('download-list').prepend(downloadingItem);
+            updateTotalDurationFromList();
+
+            // Video işleme çubuğu oluşturma: İşlem çubuğu ekleniyor
+            const container = document.getElementById('processing-progress-container');
+            const taskId = `task-${Date.now()}`;
+            const taskBarHTML = `
+    <div id="${taskId}" class="task-block">
+        <p class="processing-label">Video işleniyor...</p>
+        <div class="processing-bar-container">
+            <div class="processing-bar"></div>
+        </div>
+    </div>
+`;
+            container.insertAdjacentHTML('beforeend', taskBarHTML);
+            const taskElement = document.getElementById(taskId);
+            const progressBar = taskElement.querySelector('.processing-bar');
+            const progressLabel = taskElement.querySelector('.processing-label');
+            // İndirme çubuğu görünürlüğü ayarlanıyor
+            document.getElementById('download-progress').style.display = 'none';
+
+            // Arka uç (backend) POST isteği gönderiliyor
+            fetch("http://127.0.0.1:5001/kes-ve-indir", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: videoUrl, start: startSeconds, end: endSeconds, outputName: outputName })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                // blob() cevabını indirme işlemi: Gelen veriyi blob formatına çevirme
+                progressLabel.textContent = "Video işlendi, indiriliyor...";
+                progressBar.style.backgroundColor = "#00cc66";
+                progressBar.style.width = "100%";
+                document.getElementById('download-progress').style.display = 'block';
+                // İndirme çubuğu sıfırlanıyor
+                document.getElementById('download-bar').style.width = '0%';
+                document.getElementById('download-label').textContent = 'İndiriliyor...';
+
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${outputName}.mp4`;
+                document.body.appendChild(a);
+
+                // Sahte indirme ilerlemesi: İndirme çubuğu kademeli olarak güncelleniyor
+                let fakeProgress = 0;
+                const downloadProgressBar = document.getElementById('download-bar');
+                const downloadProgressLabel = document.getElementById('download-label');
+                const interval = setInterval(() => {
+                    fakeProgress += 10;
+                    if (fakeProgress >= 100) {
+                        fakeProgress = 100;
+                        clearInterval(interval);
+                        downloadingItem.querySelector('.download-status').textContent = "İndirildi";
+                        downloadingItem.querySelector('.download-status').style.color = "#00cc66";
+                        setTimeout(() => {
+                            downloadProgressLabel.textContent = "İndirme tamamlandı.";
+                            document.getElementById("download-progress").style.display = "none";
+                            document.getElementById("processing-progress-container").innerHTML = "";
+                        }, 1000);
+                    }
+                    downloadProgressBar.style.width = `${fakeProgress}%`;
+                    downloadProgressLabel.textContent = `İndiriliyor: ${fakeProgress}%`;
+                }, 100);
+
+                // Dosya indirme işlemi: Oluşturulan link aracılığıyla dosya indiriliyor
+                a.click();
+                a.remove();
+            })
+            .catch(err => {
+                console.error("Hata:", err);
+                alert("Bir hata oluştu: " + err.message);
+            });
+        }
+        function speakText() {
+    const text = document.getElementById("text-to-speech").value.trim();
+    const voice = document.getElementById("voice-select").value;
+    const filename = document.getElementById("speech-filename")?.value.trim() || "seslendirme";
+
+    if (!text) {
+        alert("Lütfen seslendirilecek metni girin!");
+        return;
+    }
+
+    if (!filename) {
+        alert("Lütfen ses dosyasına bir isim verin!");
+        return;
+    }
+
+    const progressBar = document.getElementById("speech-progress-bar");
+    const label = document.getElementById("speech-progress-label");
+    const container = document.getElementById("speech-progress");
+    container.style.display = "block";
+    progressBar.style.width = "0%";
+    label.textContent = "Seslendirme oluşturuluyor...";
+    console.log("Gönderilen veri:", { text, voice, filename });
+
+    fetch("http://127.0.0.1:5001/seslendir", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, voice, filename })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Seslendirme başarısız oldu.");
+        return response.blob();
+    })
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        document.getElementById("audio-preview").src = url;
+
+        const list = document.getElementById("speech-list");
+        const li = document.createElement("li");
+        const now = new Date();
+        const timestamp = now.toLocaleTimeString();
+
+        li.innerHTML = `
+        <div style="padding: 10px; border: 1px solid #6a0dad; border-radius: 6px; margin-bottom: 12px; background-color: #2e2e2e;">
+            <strong>Dosya Adı:</strong> ${filename}.mp3<br>
+            <strong>Oluşturulma Zamanı:</strong> ${timestamp}<br>
+            <strong>Karakter Sayısı:</strong> ${text.length}<br>
+            <audio controls src="${url}" style="width: 100%; margin: 10px 0;"></audio>
+            <button onclick="downloadAudio('${url}', '${filename}')">İndir</button>
+            <button onclick="this.closest('li').remove()">Sil</button>
+        </div>
+        `;
+        list.prepend(li);
+
+        progressBar.style.width = "100%";
+        label.textContent = "Seslendirme başarıyla oluşturuldu.";
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Bir hata oluştu: " + err.message);
+    });
+}
+        function startTranscription() { alert('Ses dosyası transkript ediliyor...'); }
+        function mergeVideos() { alert('Videolar birleştiriliyor...'); }
+        function loadSubtitles() { alert('Altyazılar yükleniyor...'); }
+        function splitText() {
+            const text = document.getElementById('text-to-split').value.trim();
+            const count = parseInt(document.getElementById('split-count').value);
+
+            if (!text || count < 1) return;
+
+            // Cümleleri ayır: Nokta, soru işareti veya ünlem ile biten yapılar
+            const sentences = text.match(/[^.!?]+[.!?]+/g);
+            if (!sentences || sentences.length === 0) {
+                document.getElementById('split-results').innerHTML = "<em>Cümle bulunamadı.</em>";
+                return;
+            }
+
+            const perChunk = Math.ceil(sentences.length / count);
+            let result = '';
+
+            for (let i = 0; i < count; i++) {
+                const start = i * perChunk;
+                const end = start + perChunk;
+                const chunk = sentences.slice(start, end).join(' ').trim();
+
+                result += `<div style="margin-bottom: 15px; padding: 10px; background: #555; border-radius: 5px;">
+                    <strong>Parça ${i + 1}:</strong><br>${chunk}
+                </div>`;
+            }
+
+            document.getElementById('split-results').innerHTML = result;
+        }
+        
+        // Editör fonksiyonları
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+        
+        function changeFontSize() {
+            const size = document.getElementById('font-size').value;
+            document.execCommand('fontSize', false, '7'); // Hack for cross-browser
+            const fontElements = document.querySelectorAll('#text-editor font[size="7"]');
+            fontElements.forEach(el => el.style.fontSize = size);
+        }
+        
+        function changeTextColor() {
+            const color = document.getElementById('text-color').value;
+            document.execCommand('foreColor', false, color);
+        }
+        
+        function saveTextFile() {
+            const text = document.getElementById('text-editor').innerText;
+            const blob = new Blob([text], { type: 'text/plain' });
+            saveAs(blob, 'metin.txt');
+        }
+        
+        function saveHtmlFile() {
+            const html = document.getElementById('text-editor').innerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            saveAs(blob, 'belge.html');
+        }
+        
+        // Dosya indirme fonksiyonu
+        function saveAs(blob, filename) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+        
+        // Varsayılan olarak Karakter Sayacı sayfasını göster
+        showPage('karakter-sayaci');
+
+        // Sayfa ilk yüklendiğinde video-preview alanına BANNER yerleştir
+        document.getElementById('video-preview').innerHTML = `
+            <img 
+              src="{{ url_for('static', filename='BANNER.png') }}" 
+              alt="Beklenen video kapağı" 
+              style="max-width: 100%; max-height: 250px; object-fit: cover; display: block; margin: auto; border-radius: 8px;">
+        `;
+    function pasteClipboard() {
+        navigator.clipboard.readText().then(text => {
+            document.getElementById('video-upload').value = text;
+            document.getElementById('video-upload').dispatchEvent(new Event('input'));
+        }).catch(err => {
+            alert("Panodan metin okunamadı: " + err);
+        });
+    }
+
+    function clearVideoLink() {
+        document.getElementById('video-upload').value = '';
+        document.getElementById('video-upload').dispatchEvent(new Event('input'));
+    }
+
+// Sayfa yüklendiğinde geçmiş verileri geri yükle
+window.addEventListener("load", () => {
+  const savedList = localStorage.getItem("downloadList");
+  const savedSeconds = localStorage.getItem("totalSeconds");
+  if (savedList) document.getElementById("download-list").innerHTML = savedList;
+  if (savedSeconds) {
+    totalAccumulatedSeconds = parseInt(savedSeconds);
+    document.getElementById("total-duration-display").textContent =
+      "Toplam biriktirilen video süresi: " + formatTime(totalAccumulatedSeconds);
+  }
+  updateTotalDurationFromList();
+});
+
+// Geçmişi silme fonksiyonu
+function clearHistory() {
+  document.getElementById("download-list").innerHTML = "";
+  totalAccumulatedSeconds = 0;
+  document.getElementById("total-duration-display").textContent = "Toplam biriktirilen video süresi: 00:00:00";
+  localStorage.removeItem("downloadList");
+  localStorage.removeItem("totalSeconds");
+}
+
+// Function to save the generated audio from the preview player
+        function saveAudio() {
+            const audio = document.getElementById('audio-preview');
+            if (!audio.src) {
+                alert("Henüz ses oluşturulmadı.");
+                return;
+            }
+            const a = document.createElement('a');
+            a.href = audio.src;
+            a.download = "seslendirme.mp3";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function downloadAudio(url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${filename}.mp3`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+function downloadAudio(url, filename = "seslendirme") {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${filename}.mp3`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
+            <div id="download-progress" style="position: fixed; bottom: 20px; right: 20px; width: 320px; display: none; z-index: 999;">
+                <div style="background-color: #333; border-radius: 6px; overflow: hidden;">
+                    <div id="download-bar" style="width: 0%; height: 20px; background-color: #6a0dad;"></div>
+                </div>
+                <p id="download-label" style="text-align: center; margin-top: 5px; color: white; font-weight: bold;">İndiriliyor...</p>
+            </div>
