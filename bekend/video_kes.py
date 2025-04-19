@@ -18,6 +18,12 @@ def extract_youtube_id(url):
         return query.path.lstrip("/")
     return None
 
+def parse_time(t):
+    if isinstance(t, str) and ":" in t:
+        parts = list(map(int, t.split(":")))
+        return sum(x * 60**i for i, x in enumerate(reversed(parts)))
+    return int(t)
+
 @app.route("/kes-ve-indir", methods=["POST"])
 def kes_ve_indir():
     print("✅ /kes-ve-indir endpoint'e istek geldi")
@@ -26,8 +32,9 @@ def kes_ve_indir():
     if not output_name:
         return jsonify({"error": "Dosya adı verilmedi!"}), 400
     url = data.get("url")
-    start = int(data.get("start", 0))
-    end = int(data.get("end", 0))
+    
+    start = parse_time(data.get("start", 0))
+    end = parse_time(data.get("end", 0))
 
     print(f"🎯 URL: {url}")
     print(f"⏱️  Başlangıç: {start}, Bitiş: {end}")
