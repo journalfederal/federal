@@ -70,24 +70,23 @@ def kes_ve_indir():
 
     # yt-dlp kesme
     try:
-        print("✂️  yt-dlp doğrudan kesmeye başlıyor...")
+        print("✂️  yt-dlp Python API ile kesmeye başlıyor...")
         duration_section = f"*{start}-{end}"
-        clipped_path = os.path.join(DOWNLOAD_DIR, f"{output_name}.mp4")
-
-        cmd = [
-            "yt-dlp",
-            "--cookies", "cookies.txt",
-            "--download-sections", f"*{start}-{end}",
-            "--merge-output-format", "mp4",
-            "--force-keyframes-at-cuts",
-            "-f", "bv*+ba/b",
-            "-o", clipped_path,
-            url
-        ]
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        print("yt-dlp çıktı:", result.stderr)
+        clip_opts = {
+            "format": "bestvideo+bestaudio",
+            "download_sections": [duration_section],
+            "merge_output_format": "mp4",
+            "outtmpl": clipped_path,
+            "cookies": "cookies.txt",
+            "quiet": True
+        }
+        with yt_dlp.YoutubeDL(clip_opts) as ydl:
+            ydl.download([url])
     except Exception as e:
         return jsonify({"error": f"yt-dlp kesme hatası: {str(e)}"}), 500
+
+    if not os.path.exists(clipped_path) or os.path.getsize(clipped_path) < 1024:
+        return jsonify({"error": "Video kesilemedi ya da boş çıktı!"}), 500
 
     print("✅ yt-dlp kesimi tamamlandı:", clipped_path)
     video_id = extract_youtube_id(url)
