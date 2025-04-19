@@ -29,6 +29,7 @@ def parse_time(t):
 @app.route("/kes-ve-indir", methods=["POST"])
 def kes_ve_indir():
     print("✅ /kes-ve-indir endpoint'e istek geldi")
+    print("🍪 Cookies dosyası mevcut mu?", os.path.exists("cookies.txt"))
     data = request.get_json()
     output_name = data.get("outputName", "").strip()
     if not output_name:
