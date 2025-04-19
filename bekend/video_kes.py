@@ -1,6 +1,8 @@
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 import yt_dlp
+import shutil
+print("🧪 yt-dlp PATH kontrolü:", shutil.which("yt-dlp"))
 import subprocess
 import os
 from urllib.parse import urlparse, parse_qs
