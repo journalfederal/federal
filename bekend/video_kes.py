@@ -30,6 +30,8 @@ def parse_time(t):
 def kes_ve_indir():
     print("✅ /kes-ve-indir endpoint'e istek geldi")
     print("🍪 Cookies dosyası mevcut mu?", os.path.exists("cookies.txt"))
+    print("📂 Dosya listesi (bekend):", os.listdir("."))
+    print("📂 Dosya listesi (downloads):", os.listdir("downloads") if os.path.exists("downloads") else "downloads klasörü yok")
     data = request.get_json()
     output_name = data.get("outputName", "").strip()
     if not output_name:
